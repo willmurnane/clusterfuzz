@@ -1,0 +1,6 @@
+## Append samples of your project ##
+resources:
+- targets_v1alpha1_s3target.yaml
+- targets_v1alpha1_fuzzjob.yaml
+- targets_v1alpha1_imagetarget.yaml
+# +kubebuilder:scaffold:manifestskustomizesamples

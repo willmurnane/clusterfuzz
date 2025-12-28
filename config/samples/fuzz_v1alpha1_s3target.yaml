@@ -1,0 +1,16 @@
+apiVersion: fuzz.will.murnane.family/v1alpha1
+kind: S3Target
+metadata:
+  name: s3target-sample
+spec:
+  bucket: somebucket
+  # endpoint:
+  # region:
+  accessKey: asdf
+  secretKey: sdfg
+  binaries:
+    amd64: /someprefix/myapp-x86-linux-gnu-unknown
+    amd64_asan: /someprefix/myapp-x86-linux-gnu-unknown
+    arm64: /someprefix/myapp-arm64-linux-gnu-unknown
+  # Size limit for downloading the binaries, must be larger than any of the binaries in the bucket.
+  sizeLimit: 100Mi

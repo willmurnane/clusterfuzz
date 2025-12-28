@@ -1,0 +1,9 @@
+apiVersion: fuzz.will.murnane.family/v1alpha1
+kind: FuzzJob
+metadata:
+  name: fuzzjob-sample
+spec:
+  cores: 24
+  targetRef:
+    name: s3target-sample
+    kind: S3Target

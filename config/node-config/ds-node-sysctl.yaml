@@ -1,0 +1,41 @@
+# TODO: un-tested.
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: afl-node-config
+spec:
+  template:
+    spec:
+      hostPID: true # Necessary to reach host sysctls
+      containers:
+      - name: config
+        image: busybox:latest
+        securityContext:
+          privileged: true
+        command:
+        - "sh"
+        - "-exc"
+        - |-
+          cleanup() {
+            # Restore original governors on termination
+            if [ -f /tmp/orig_governors.txt ]; then
+              i=0
+              for cpu in /sys/devices/system/cpu/cpu*; do
+                if [ -f "$cpu/cpufreq/scaling_governor" ]; then
+                  orig_governor=$(sed -n "$((i + 1))p" /tmp/orig_governors.txt)
+                  echo "$orig_governor" > "$cpu/cpufreq/scaling_governor"
+                  i=$((i + 1))
+                fi
+              done
+            fi
+          }
+          trap "cleanup" TERM INT
+          cd /sys/devices/system/cpu
+          # Capture the original governor to restore later if needed.
+          cat cpu*/cpufreq/scaling_governor > /tmp/orig_governors.txt
+          # Set all CPUs to performance mode for fuzzing, as AFL suggests https://aflplus.plus/docs/perf_tips/#8-check-os-configuration
+          echo performance | tee cpu*/cpufreq/scaling_governor
+          sysctl -w kernel.core_pattern=core
+          sysctl -w kernel.sched_child_runs_first=1
+          echo "Sysctls and performance governor set for fuzzing."
+          sleep infinity

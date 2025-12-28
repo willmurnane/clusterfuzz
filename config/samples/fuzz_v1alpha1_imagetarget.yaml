@@ -1,0 +1,6 @@
+apiVersion: fuzz.will.murnane.family/v1alpha1
+kind: ImageTarget
+metadata:
+  name: imagetarget-sample
+spec:
+  image: some.domain/my-target:v1.23
