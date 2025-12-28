@@ -12,7 +12,7 @@ jobs:
         uses: actions/checkout@v4
       - name: Build container
         run: |
-          docker build . -t registry.will.murnane.family/clusterfuzz:latest
+          docker build . -t registry.will.murnane.family/clusterfuzz:latest --platform linux/amd64,linux/arm64
           docker push registry.will.murnane.family/clusterfuzz:latest
   Lint:
     env:
