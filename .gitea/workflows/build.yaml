@@ -10,6 +10,8 @@ jobs:
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
       - name: Build container
         run: |
           docker build . -t registry.will.murnane.family/clusterfuzz:latest --platform linux/amd64,linux/arm64
