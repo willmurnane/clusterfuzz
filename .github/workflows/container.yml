@@ -4,10 +4,16 @@ on:
   push:
   pull_request:
 
+env:
+  BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
+
 jobs:
   lint:
     name: Run on Ubuntu
     runs-on: ubuntu-latest
+    env:
+      REGISTRY: ghcr.io
+      IMAGE_NAME: ${{ github.repository }}
     steps:
       - name: Clone the code
         uses: actions/checkout@v4
