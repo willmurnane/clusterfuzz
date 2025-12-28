@@ -1,5 +1,6 @@
 # Image URL to use all building/pushing image targets
 IMG ?= registry.will.murnane.family/clusterfuzz:latest
+PLATFORMS ?= linux/amd64
 
 # Get the currently used golang install path (in GOPATH/bin, unless GOBIN is set)
 ifeq (,$(shell go env GOBIN))
@@ -119,7 +120,7 @@ run: manifests generate fmt vet ## Run a controller from your host.
 # More info: https://docs.docker.com/develop/develop-images/build_enhancements/
 .PHONY: docker-build
 docker-build: ## Build docker image with the manager.
-	$(CONTAINER_TOOL) build -t ${IMG} --platform linux/amd64,linux/arm64 .
+	$(CONTAINER_TOOL) build -t ${IMG} --platform $(PLATFORMS) .
 
 .PHONY: docker-push
 docker-push: ## Push docker image with the manager.
