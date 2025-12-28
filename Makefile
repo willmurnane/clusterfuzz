@@ -1,5 +1,6 @@
 # Image URL to use all building/pushing image targets
-IMG ?= controller:latest
+IMG ?= registry.will.murnane.family/clusterfuzz:latest
+PLATFORMS ?= linux/amd64
 
 # Get the currently used golang install path (in GOPATH/bin, unless GOBIN is set)
 ifeq (,$(shell go env GOBIN))
@@ -20,7 +21,8 @@ SHELL = /usr/bin/env bash -o pipefail
 .SHELLFLAGS = -ec
 
 .PHONY: all
-all: build
+all: manifests generate lint build docker-build docker-push ## Build and push the docker image with the manager.
+	@echo "Build and push completed for image: ${IMG}"
 
 ##@ General
 
@@ -105,7 +107,7 @@ lint-config: golangci-lint ## Verify golangci-lint linter configuration
 ##@ Build
 
 .PHONY: build
-build: manifests generate fmt vet lint ## Build manager binary.
+build: ## Build manager binary.
 	go build -o bin/manager cmd/controller/main.go
 	go build -o bin/stats cmd/stats/main.go
 
@@ -118,7 +120,7 @@ run: manifests generate fmt vet ## Run a controller from your host.
 # More info: https://docs.docker.com/develop/develop-images/build_enhancements/
 .PHONY: docker-build
 docker-build: ## Build docker image with the manager.
-	$(CONTAINER_TOOL) build -t ${IMG} .
+	$(CONTAINER_TOOL) build -t ${IMG} --platform $(PLATFORMS) .
 
 .PHONY: docker-push
 docker-push: ## Push docker image with the manager.
