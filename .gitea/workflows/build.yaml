@@ -14,3 +14,13 @@ jobs:
         run: |
           docker build . -t registry.will.murnane.family/clusterfuzz:latest
           docker push registry.will.murnane.family/clusterfuzz:latest
+  Lint:
+    env:
+      RUNNER_TOOL_CACHE: /var/lib/docker/
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+      - name: Build container
+        run: |
+          make lint fmt vet

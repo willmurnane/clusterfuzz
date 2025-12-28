@@ -105,7 +105,7 @@ lint-config: golangci-lint ## Verify golangci-lint linter configuration
 ##@ Build
 
 .PHONY: build
-build: manifests generate fmt vet lint ## Build manager binary.
+build: manifests generate ## Build manager binary.
 	go build -o bin/manager cmd/controller/main.go
 	go build -o bin/stats cmd/stats/main.go
 
